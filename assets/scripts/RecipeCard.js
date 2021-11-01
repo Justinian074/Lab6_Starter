@@ -101,6 +101,8 @@ class RecipeCard extends HTMLElement {
     // created in the constructor()
 
     // Part 1 Expose - TODO
+    this.shadowRoot.appendChild(styleElem);
+    this.shadowRoot.appendChild(card);
 
     // Thumbnail Image
     const image = document.createElement("img");
@@ -171,8 +173,6 @@ class RecipeCard extends HTMLElement {
     ingredients.innerHTML = createIngredientList(searchForKey(data, "recipeIngredient"));
     card.appendChild(ingredients);
 
-    this.shadowRoot.appendChild(styleElem);
-    this.shadowRoot.appendChild(card);
   }
 }
 
