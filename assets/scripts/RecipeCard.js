@@ -1,7 +1,8 @@
 class RecipeCard extends HTMLElement {
   constructor() {
     // Part 1 Expose - TODO
-
+    super();
+    let shadow = this.attachShadow({ mode: "open" });
     // You'll want to attach the shadow DOM here
   }
 
@@ -100,6 +101,78 @@ class RecipeCard extends HTMLElement {
     // created in the constructor()
 
     // Part 1 Expose - TODO
+
+    // Thumbnail Image
+    const image = document.createElement("img");
+    image.setAttribute("src", searchForKey(data, "thumbnailUrl"));
+    image.setAttribute("alt", searchForKey(data, "headline"));
+    card.appendChild(image);
+
+    // Title
+    const title = document.createElement("p");
+    title.setAttribute("class", "title");
+    const titleLink = document.createElement("a");
+    titleLink.innerHTML = searchForKey(data, "headline");
+    titleLink.setAttribute("href", getUrl(data))
+    title.appendChild(titleLink);
+    card.appendChild(title);
+
+    // Organization
+    const organization = document.createElement("p");
+    organization.setAttribute("class", "organization");
+    organization.innerHTML = getOrganization(data);
+    card.appendChild(organization);
+
+    // Ratings
+    const rating = document.createElement("div");
+    rating.setAttribute("class", "rating");
+    const ratingAverage = document.createElement("span");
+    const ratingImage = document.createElement("img");
+    const ratingNumber = document.createElement("span");
+    console.log(searchForKey(data, "aggregateRating"));
+    if(searchForKey(data, "aggregateRating") == undefined){
+      ratingAverage.innerHTML = "No Reviews";
+    }
+    else{
+      ratingAverage.innerHTML = searchForKey(data, "ratingValue");
+      ratingNumber.innerHTML = "(" + searchForKey(data, "ratingCount") + ")";
+      if(Math.round(searchForKey(data, "ratingValue")) == 5){
+        ratingImage.setAttribute("src", "./assets/images/icons/5-star.svg");
+      }
+      else if(Math.round(searchForKey(data, "ratingValue")) == 4){
+        ratingImage.setAttribute("src", "./assets/images/icons/4-star.svg");
+      }
+      else if(Math.round(searchForKey(data, "ratingValue")) == 3){
+        ratingImage.setAttribute("src", "./assets/images/icons/3-star.svg");
+      }
+      else if(Math.round(searchForKey(data, "ratingValue")) == 2){
+        ratingImage.setAttribute("src", "./assets/images/icons/2-star.svg");
+      }
+      else if(Math.round(searchForKey(data, "ratingValue")) == 1){
+        ratingImage.setAttribute("src", "./assets/images/icons/1-star.svg");
+      }
+      else{
+        ratingImage.setAttribute("src", "./assets/images/icons/0-star.svg");
+      }
+    }
+    rating.appendChild(ratingAverage);
+    rating.appendChild(ratingImage);
+    rating.appendChild(ratingNumber);
+    card.appendChild(rating);
+
+    // Time
+    const time = document.createElement("time");
+    time.innerHTML = convertTime(searchForKey(data, "totalTime"));
+    card.appendChild(time);
+
+    // Ingredients
+    const ingredients = document.createElement("p");
+    ingredients.setAttribute("class", "ingredients");
+    ingredients.innerHTML = createIngredientList(searchForKey(data, "recipeIngredient"));
+    card.appendChild(ingredients);
+
+    this.shadowRoot.appendChild(styleElem);
+    this.shadowRoot.appendChild(card);
   }
 }
 
